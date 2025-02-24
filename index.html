@@ -1,94 +1,78 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.2">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'; min-height: 15.0px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sheets Entry App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+      text-align: center;
+    }
+    #entries {
+      margin-top: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Google Sheets Entry App&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: Arial, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #f5f5f5;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#entries {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>input, button {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 5px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;Google Sheets Data Manager&lt;/h1&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;input type="text" id="newEntry" placeholder="Enter new data" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="addEntry()"&gt;Add Entry&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="entries"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Entries from Google Sheet:&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;ul id="entryList"&gt;&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const WEB_APP_URL = '<a href="https://script.google.com/macros/s/AKfycbzz0zfTAYg8BO4XCamVZ27jzhPFswWr70pii4WXgkFdyRwul63aiT-xz8sCPO9W88AGvw/exec">https://script.google.com/macros/s/AKfycbzz0zfTAYg8BO4XCamVZ27jzhPFswWr70pii4WXgkFdyRwul63aiT-xz8sCPO9W88AGvw/exec</a>'; // Replace with your actual URL</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Function to add a new entry</p>
-<p class="p1"><span class="Apple-converted-space">    </span>async function addEntry() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const data = document.getElementById('newEntry').value;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (!data) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>alert('Please enter some data!');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>await fetch(`${WEB_APP_URL}?action=addEntry&amp;data=${encodeURIComponent(data)}`);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('newEntry').value = '';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>fetchEntries(); // Refresh list</p>
-<p class="p1"><span class="Apple-converted-space">      </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>console.error('Error adding entry:', error);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Function to fetch all entries</p>
-<p class="p1"><span class="Apple-converted-space">    </span>async function fetchEntries() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const response = await fetch(`${WEB_APP_URL}?action=getEntries`);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const entries = await response.json();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const entryList = document.getElementById('entryList');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>entryList.innerHTML = ''; // Clear existing entries</p>
-<p class="p1"><span class="Apple-converted-space">        </span>entries.forEach(entry =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const listItem = document.createElement('li');</p>
-<p class="p1"><span class="Apple-converted-space">          </span>listItem.textContent = entry[0]; // Assuming single-column entries</p>
-<p class="p1"><span class="Apple-converted-space">          </span>entryList.appendChild(listItem);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>console.error('Error fetching entries:', error);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Fetch entries on page load</p>
-<p class="p1"><span class="Apple-converted-space">    </span>fetchEntries();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+  <h1>Google Sheets Data Manager</h1>
+
+  <input type="text" id="newEntry" placeholder="Enter new data" />
+  <button onclick="addEntry()">Add Entry</button>
+
+  <div id="entries">
+    <h2>Entries from Google Sheet:</h2>
+    <ul id="entryList"></ul>
+  </div>
+
+  <script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzz0zfTAYg8BO4XCamVZ27jzhPFswWr70pii4WXgkFdyRwul63aiT-xz8sCPO9W88AGvw/exec'; // Replace with your actual URL
+
+    // Function to add a new entry
+    async function addEntry() {
+      const data = document.getElementById('newEntry').value;
+      if (!data) {
+        alert('Please enter some data!');
+        return;
+      }
+      try {
+        await fetch(`${WEB_APP_URL}?action=addEntry&data=${encodeURIComponent(data)}`);
+        document.getElementById('newEntry').value = '';
+        fetchEntries(); // Refresh list
+      } catch (error) {
+        console.error('Error adding entry:', error);
+      }
+    }
+
+    // Function to fetch all entries
+    async function fetchEntries() {
+      try {
+        const response = await fetch(`${WEB_APP_URL}?action=getEntries`);
+        const entries = await response.json();
+        const entryList = document.getElementById('entryList');
+        entryList.innerHTML = ''; // Clear existing entries
+        entries.forEach(entry => {
+          const listItem = document.createElement('li');
+          listItem.textContent = entry[0]; // Assuming single-column entries
+          entryList.appendChild(listItem);
+        });
+      } catch (error) {
+        console.error('Error fetching entries:', error);
+      }
+    }
+
+    // Fetch entries on page load
+    fetchEntries();
+  </script>
 </body>
 </html>
