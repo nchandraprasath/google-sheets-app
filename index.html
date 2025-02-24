@@ -50,6 +50,7 @@
 <!-- Add Entry Form -->
 <h2>Add New Entry</h2>
 <form id="entry-form">
+  <input type="date" id="date" required />
   <input type="text" id="name" placeholder="Enter Name" required />
   <input type="number" id="amount" placeholder="Enter Amount" required />
   <textarea id="notes" placeholder="Enter Notes"></textarea>
@@ -104,10 +105,10 @@
     e.preventDefault();
 
     // Collect form data
+    const date = document.getElementById('date').value;
     const name = document.getElementById('name').value;
     const amount = document.getElementById('amount').value;
     const notes = document.getElementById('notes').value;
-    const date = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
 
     // Prepare data payload
     const entryData = {
