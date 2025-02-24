@@ -3,73 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sheets Data Manager</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f9;
-    }
-    h1 {
-      text-align: center;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      background-color: #fff;
-    }
-    th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
-    th {
-      background-color: #007bff;
-      color: white;
-    }
-    form {
-      margin-top: 20px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    input {
-      padding: 8px;
-      margin: 10px 0;
-      width: calc(100% - 20px);
-    }
-    button {
-      padding: 10px 15px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <title>Google Sheets App</title>
 </head>
 <body>
+  <h1>Google Sheets Data</h1>
 
-  <h1>Google Sheets Data Manager</h1>
-
-  <form id="entryForm">
-    <label for="date">Date:</label><br>
-    <input type="date" id="date" required><br>
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" placeholder="Enter name" required><br>
-    <label for="amount">Amount:</label><br>
-    <input type="number" id="amount" placeholder="Enter amount" required><br>
-    <label for="notes">Notes:</label><br>
-    <input type="text" id="notes" placeholder="Enter notes" required><br>
-    <button type="button" onclick="addEntry()">Add Entry</button>
-  </form>
-
-  <table id="dataTable">
+  <table id="dataTable" border="1">
     <thead>
       <tr>
         <th>Date</th>
@@ -78,73 +17,76 @@
         <th>Notes</th>
       </tr>
     </thead>
-    <tbody>
-      <!-- Data will be inserted here dynamically -->
-    </tbody>
+    <tbody></tbody>
   </table>
+
+  <h2>Add New Entry</h2>
+  <form id="entryForm">
+    <label>Date: <input type="date" id="date" required></label><br>
+    <label>Name: <input type="text" id="name" required></label><br>
+    <label>Amount: <input type="number" id="amount" required></label><br>
+    <label>Notes: <input type="text" id="notes"></label><br>
+    <button type="submit">Add Entry</button>
+  </form>
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyFcr4JSDx6l-DauOQhGFb35Gr0LHCNTLf9K7zQD87j_KP2MbbKlhUoWX2980No5QYAYg/exec';
 
-    // Function to fetch entries from Google Sheets
-    function fetchEntries() {
-      fetch(scriptURL)
-        .then(response => response.json())
-        .then(data => {
-          console.log("Data fetched:", data);
-          displayEntries(data);
-        })
-        .catch(error => console.error('Error fetching data:', error));
+    // Fetch and display data from Google Sheets
+    async function fetchData() {
+      try {
+        const response = await fetch(scriptURL);
+        const entries = await response.json();
+        displayEntries(entries);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
 
-    // Function to display entries in the table
     function displayEntries(entries) {
       const tableBody = document.querySelector('#dataTable tbody');
       tableBody.innerHTML = ''; // Clear existing data
-
       entries.forEach(entry => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${entry.Date}</td>
-          <td>${entry.Name}</td>
-          <td>${entry.Amount}</td>
-          <td>${entry.Notes}</td>
-        `;
+        row.innerHTML = `<td>${entry.Date}</td><td>${entry.Name}</td><td>${entry.Amount}</td><td>${entry.Notes}</td>`;
         tableBody.appendChild(row);
       });
     }
 
-    // Function to add a new entry
-    function addEntry() {
-      const date = document.getElementById('date').value;
-      const name = document.getElementById('name').value;
-      const amount = document.getElementById('amount').value;
-      const notes = document.getElementById('notes').value;
+    // Add new entry to Google Sheet
+    document.getElementById('entryForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const newEntry = {
+        Date: document.getElementById('date').value,
+        Name: document.getElementById('name').value,
+        Amount: document.getElementById('amount').value,
+        Notes: document.getElementById('notes').value
+      };
 
-      if (!date || !name || !amount || !notes) {
-        alert('Please fill all fields!');
-        return;
+      try {
+        const response = await fetch(scriptURL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newEntry)
+        });
+
+        const result = await response.json();
+        console.log('Entry added:', result);
+        if (result.result === "Success") {
+          fetchData(); // Refresh data after successful entry
+        } else {
+          alert('Error adding entry: ' + result.message);
+        }
+      } catch (error) {
+        console.error('Error adding entry:', error);
       }
+    });
 
-      fetch(scriptURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `Date=${encodeURIComponent(date)}&Name=${encodeURIComponent(name)}&Amount=${encodeURIComponent(amount)}&Notes=${encodeURIComponent(notes)}`
-      })
-      .then(response => response.json())
-      .then(result => {
-        console.log("Entry added:", result);
-        fetchEntries(); // Refresh table after adding
-        document.getElementById('entryForm').reset(); // Clear form
-      })
-      .catch(error => console.error('Error adding entry:', error));
-    }
-
-    // Fetch entries on page load
-    window.onload = fetchEntries;
+    // Initial fetch of data
+    fetchData();
   </script>
-
 </body>
 </html>
